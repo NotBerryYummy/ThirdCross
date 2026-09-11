@@ -15,13 +15,7 @@ public class ThirdCrossClient {
                 (minecraft, parent) -> new ConfigurationScreen(
                         container,
                         parent,
-                        (configurationScreen, type, modConfig, title) ->
-                                new ThirdCrossConfigScreen(
-                                        configurationScreen,
-                                        type,
-                                        modConfig,
-                                        title
-                                )
+                        ThirdCrossConfigScreen::new
                 )
         );
     }

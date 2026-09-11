@@ -34,6 +34,7 @@ public class AimProjection {
     private static CameraType lastCameraType;
     private static Level lastLevel;
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public static void onRenderLevel(RenderLevelStageEvent event) {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_LEVEL) {
@@ -42,8 +43,8 @@ public class AimProjection {
 
         valid = false;
 
-        final Minecraft minecraft = Minecraft.getInstance();
-        final CameraType currentCameraType = minecraft.options.getCameraType();
+        Minecraft minecraft = Minecraft.getInstance();
+        CameraType currentCameraType = minecraft.options.getCameraType();
 
         if (currentCameraType != lastCameraType || minecraft.level != lastLevel) {
             resetAimState();
@@ -51,28 +52,28 @@ public class AimProjection {
             lastLevel = minecraft.level;
         }
 
-        final float partialTicks =
+        float partialTicks =
                 event.getPartialTick().getGameTimeDeltaPartialTick(false);
 
-        final HitResult aimResult = PlayerAim.getAimResult(partialTicks);
+        HitResult aimResult = PlayerAim.getAimResult(partialTicks);
 
         if (aimResult == null || minecraft.player == null) {
             return;
         }
 
-        final Vec3 aimPoint = aimResult.getLocation();
+        Vec3 aimPoint = aimResult.getLocation();
         targetType = aimResult.getType();
 
         targetDistance = minecraft.player.getEyePosition(partialTicks)
                 .distanceTo(aimPoint);
 
-        final Vec3 cameraPosition = event.getCamera().getPosition();
+        Vec3 cameraPosition = event.getCamera().getPosition();
 
-        final float relativeX = (float) (aimPoint.x - cameraPosition.x);
-        final float relativeY = (float) (aimPoint.y - cameraPosition.y);
-        final float relativeZ = (float) (aimPoint.z - cameraPosition.z);
+        float relativeX = (float) (aimPoint.x - cameraPosition.x);
+        float relativeY = (float) (aimPoint.y - cameraPosition.y);
+        float relativeZ = (float) (aimPoint.z - cameraPosition.z);
 
-        final Vector4f position = new Vector4f(
+        Vector4f position = new Vector4f(
                 relativeX,
                 relativeY,
                 relativeZ,
@@ -87,8 +88,8 @@ public class AimProjection {
             return;
         }
 
-        final float normalizedX = position.x / position.w;
-        final float normalizedY = position.y / position.w;
+        float normalizedX = position.x / position.w;
+        float normalizedY = position.y / position.w;
 
         if (normalizedX < -1.0f || normalizedX > 1.0f
                 || normalizedY < -1.0f || normalizedY > 1.0f) {
@@ -96,11 +97,11 @@ public class AimProjection {
             return;
         }
 
-        final int screenWidth = minecraft.getWindow().getGuiScaledWidth();
-        final int screenHeight = minecraft.getWindow().getGuiScaledHeight();
+        int screenWidth = minecraft.getWindow().getGuiScaledWidth();
+        int screenHeight = minecraft.getWindow().getGuiScaledHeight();
 
-        final float targetX = (normalizedX + 1.0f) * 0.5f * screenWidth;
-        final float targetY = (1.0f - normalizedY) * 0.5f * screenHeight;
+        float targetX = (normalizedX + 1.0f) * 0.5f * screenWidth;
+        float targetY = (1.0f - normalizedY) * 0.5f * screenHeight;
 
         updateSmoothedPosition(targetX, targetY);
 
@@ -117,7 +118,7 @@ public class AimProjection {
             return;
         }
 
-        final float distance = (float) Math.hypot(
+        float distance = (float) Math.hypot(
                 targetX - smoothedX,
                 targetY - smoothedY
         );
@@ -128,7 +129,7 @@ public class AimProjection {
             return;
         }
 
-        final float smoothingFactor = getSmoothingFactor();
+        float smoothingFactor = getSmoothingFactor();
 
         smoothedX += (targetX - smoothedX) * smoothingFactor;
         smoothedY += (targetY - smoothedY) * smoothingFactor;
@@ -151,45 +152,54 @@ public class AimProjection {
         targetDistance = 0.0D;
     }
 
-    public static float getCrosshairSize() {
+    public static float getCrosshairSize(float baselineSize) {
         if (targetType == null) {
-            return DEFAULT_CROSSHAIR_SIZE;
+            return baselineSize;
         }
 
         if (targetType == HitResult.Type.MISS) {
             return Config.DISTANCE_BASED_AIM_SIZE.get()
                     ? 0.0f
-                    : DEFAULT_CROSSHAIR_SIZE;
+                    : baselineSize;
         }
 
         if (!Config.DISTANCE_BASED_AIM_SIZE.get()) {
-            return DEFAULT_CROSSHAIR_SIZE;
+            return baselineSize;
         }
 
-        final Minecraft minecraft = Minecraft.getInstance();
+        Minecraft minecraft = Minecraft.getInstance();
 
         if (minecraft.player == null) {
-            return DEFAULT_CROSSHAIR_SIZE;
+            return baselineSize;
         }
 
-        final double interactionRange = switch (targetType) {
+        double interactionRange = switch (targetType) {
             case BLOCK -> minecraft.player.blockInteractionRange();
             case ENTITY -> minecraft.player.entityInteractionRange();
             default -> 0.0D;
         };
 
         if (interactionRange <= 0.0D) {
-            return DEFAULT_CROSSHAIR_SIZE;
+            return baselineSize;
         }
+
+        float distanceBasedSize;
 
         if (targetDistance >= interactionRange) {
-            return MINIMUM_CROSSHAIR_SIZE;
+            distanceBasedSize = MINIMUM_CROSSHAIR_SIZE;
+        } else {
+            float progress = (float) (targetDistance / interactionRange);
+
+            distanceBasedSize =
+                    MAXIMUM_CROSSHAIR_SIZE
+                            - (MAXIMUM_CROSSHAIR_SIZE - MINIMUM_CROSSHAIR_SIZE)
+                            * progress;
         }
 
-        final float progress = (float) (targetDistance / interactionRange);
+        float distanceMultiplier =
+                distanceBasedSize / DEFAULT_CROSSHAIR_SIZE;
 
-        return MAXIMUM_CROSSHAIR_SIZE
-                - (MAXIMUM_CROSSHAIR_SIZE - MINIMUM_CROSSHAIR_SIZE) * progress;
+        return baselineSize * distanceMultiplier;
     }
 
     public static boolean isValid() {

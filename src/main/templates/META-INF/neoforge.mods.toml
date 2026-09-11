@@ -13,6 +13,9 @@ description='''
 ThirdCross adds configurable first- and third-person crosshairs, including an aim-point crosshair that follows blocks and entities.
 '''
 
+[[mixins]]
+config="thirdcross.mixins.json"
+
 [[dependencies.${mod_id}]]
 modId="neoforge"
 type="required"

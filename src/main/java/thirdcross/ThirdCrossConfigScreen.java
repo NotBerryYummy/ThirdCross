@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -30,10 +31,10 @@ public class ThirdCrossConfigScreen extends ConfigurationScreen.ConfigurationSec
 
     @Override
     protected <T extends Enum<T>> Element createEnumValue(
-            String key,
-            ModConfigSpec.ValueSpec spec,
-            Supplier<T> source,
-            Consumer<T> target
+            @NotNull String key,
+            @NotNull ModConfigSpec.ValueSpec spec,
+            @NotNull Supplier<T> source,
+            @NotNull Consumer<T> target
     ) {
         Element element = super.createEnumValue(
                 key,
@@ -66,10 +67,10 @@ public class ThirdCrossConfigScreen extends ConfigurationScreen.ConfigurationSec
 
     @Override
     protected Element createBooleanValue(
-            String key,
-            ModConfigSpec.ValueSpec spec,
-            Supplier<Boolean> source,
-            Consumer<Boolean> target
+            @NotNull String key,
+            @NotNull ModConfigSpec.ValueSpec spec,
+            @NotNull Supplier<Boolean> source,
+            @NotNull Consumer<Boolean> target
     ) {
         Element element = super.createBooleanValue(
                 key,

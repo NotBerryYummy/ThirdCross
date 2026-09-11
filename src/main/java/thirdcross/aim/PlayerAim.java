@@ -14,12 +14,11 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class PlayerAim {
+public final class PlayerAim {
 
     private static final double MINIMUM_RAY_DISTANCE = 100.0D;
 
     private PlayerAim() {
-        // Utility class; do not instantiate.
     }
 
     public static HitResult getAimResult(float partialTicks) {
