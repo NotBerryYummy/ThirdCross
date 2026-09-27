@@ -1,6 +1,15 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
+        mavenCentral()
+        maven {
+            name = "NeoForge"
+            url = "https://maven.neoforged.net/releases"
+        }
+        maven {
+            name = "Fabric"
+            url = "https://maven.fabricmc.net/"
+        }
     }
 }
 
@@ -9,3 +18,7 @@ plugins {
 }
 
 rootProject.name = 'ThirdCross'
+
+include 'common'
+include 'neoforge'
+include 'fabric'
