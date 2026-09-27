@@ -1,19 +1,16 @@
 package thirdcross;
 
+import net.minecraft.client.Camera;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import org.joml.Matrix4f;
 import org.joml.Vector4f;
 import thirdcross.aim.PlayerAim;
 
-@EventBusSubscriber(modid = ThirdCross.MODID, value = Dist.CLIENT)
-public class AimProjection {
+public final class AimProjection {
 
     private static final float SNAP_DISTANCE = 100.0f;
     private static final float DEFAULT_CROSSHAIR_SIZE = 15.0f;
@@ -34,13 +31,15 @@ public class AimProjection {
     private static CameraType lastCameraType;
     private static Level lastLevel;
 
-    @SuppressWarnings("unused")
-    @SubscribeEvent
-    public static void onRenderLevel(RenderLevelStageEvent event) {
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_LEVEL) {
-            return;
-        }
+    private AimProjection() {
+    }
 
+    public static void update(
+            float partialTicks,
+            Camera camera,
+            Matrix4f modelViewMatrix,
+            Matrix4f projectionMatrix
+    ) {
         valid = false;
 
         Minecraft minecraft = Minecraft.getInstance();
@@ -51,9 +50,6 @@ public class AimProjection {
             lastCameraType = currentCameraType;
             lastLevel = minecraft.level;
         }
-
-        float partialTicks =
-                event.getPartialTick().getGameTimeDeltaPartialTick(false);
 
         HitResult aimResult = PlayerAim.getAimResult(partialTicks);
 
@@ -67,7 +63,7 @@ public class AimProjection {
         targetDistance = minecraft.player.getEyePosition(partialTicks)
                 .distanceTo(aimPoint);
 
-        Vec3 cameraPosition = event.getCamera().getPosition();
+        Vec3 cameraPosition = camera.getPosition();
 
         float relativeX = (float) (aimPoint.x - cameraPosition.x);
         float relativeY = (float) (aimPoint.y - cameraPosition.y);
@@ -80,8 +76,8 @@ public class AimProjection {
                 1.0f
         );
 
-        position.mul(event.getModelViewMatrix());
-        position.mul(event.getProjectionMatrix());
+        position.mul(modelViewMatrix);
+        position.mul(projectionMatrix);
 
         if (position.w <= 0.0f) {
             resetAimState();
