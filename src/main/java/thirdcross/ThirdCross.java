@@ -10,6 +10,7 @@ public class ThirdCross {
     public static final String MODID = "thirdcross";
 
     public ThirdCross(IEventBus modEventBus, ModContainer modContainer) {
-        modContainer.registerConfig(ModConfig.Type.CLIENT, Config.SPEC);
+        NeoForgeConfig.initialize();
+        modContainer.registerConfig(ModConfig.Type.CLIENT, NeoForgeConfig.SPEC);
     }
 }

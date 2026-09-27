@@ -2,9 +2,9 @@ package thirdcross;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-public final class Config {
+public final class NeoForgeConfig {
 
-    private Config() {
+    private NeoForgeConfig() {
     }
 
     private static final ModConfigSpec.Builder BUILDER =
@@ -50,5 +50,16 @@ public final class Config {
                     .comment("Show the crosshair while using the back-facing third-person camera.")
                     .define("crosshairInBackPerspective", false);
 
-    static final ModConfigSpec SPEC = BUILDER.build();
+    public static final ModConfigSpec SPEC = BUILDER.build();
+
+    public static void initialize() {
+        Config.FIRST_PERSON_CROSSHAIR = FIRST_PERSON_CROSSHAIR::get;
+        Config.CROSSHAIR_MODE = CROSSHAIR_MODE::get;
+        Config.STATIC_CROSSHAIR_STYLE = STATIC_CROSSHAIR_STYLE::get;
+        Config.AIM_SMOOTHING = AIM_SMOOTHING::get;
+        Config.DISTANCE_BASED_AIM_SIZE = DISTANCE_BASED_AIM_SIZE::get;
+        Config.CROSSHAIR_TINT = CROSSHAIR_TINT::get;
+        Config.SKIP_BACK_PERSPECTIVE = SKIP_BACK_PERSPECTIVE::get;
+        Config.CROSSHAIR_IN_BACK_PERSPECTIVE = CROSSHAIR_IN_BACK_PERSPECTIVE::get;
+    }
 }
