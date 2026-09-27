@@ -18,7 +18,3 @@ plugins {
 }
 
 rootProject.name = 'ThirdCross'
-
-include 'common'
-include 'neoforge'
-include 'fabric'

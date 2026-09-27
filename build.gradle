@@ -10,8 +10,13 @@ tasks.named('wrapper', Wrapper).configure {
 version = mod_version
 group = mod_group_id
 
+sourceSets.main.java {
+    srcDir('common/src/main/java')
+}
+
 sourceSets.main.resources {
     srcDir('src/generated/resources')
+    srcDir('common/src/main/resources')
 }
 
 repositories {
