@@ -172,6 +172,7 @@ public final class FabricConfigScreen extends Screen {
                                     !skipBackPerspective;
 
                             updateButtonLabels();
+                            updateButtonStates();
                         }
                 ).bounds(
                         leftColumn,
@@ -199,7 +200,7 @@ public final class FabricConfigScreen extends Screen {
                 ).build()
         );
 
-        updateStaticStyleButtonState();
+        updateButtonStates();
 
         // Done button
         int doneWidth = 200;
@@ -230,6 +231,7 @@ public final class FabricConfigScreen extends Screen {
                         ];
 
         updateButtonLabels();
+        updateButtonStates();
     }
 
     private void cycleCrosshairMode() {
@@ -242,7 +244,7 @@ public final class FabricConfigScreen extends Screen {
                         ];
 
         updateButtonLabels();
-        updateStaticStyleButtonState();
+        updateButtonStates();
     }
 
     private void cycleStaticCrosshairStyle() {
@@ -305,9 +307,39 @@ public final class FabricConfigScreen extends Screen {
         );
     }
 
-    private void updateStaticStyleButtonState() {
+    private void updateButtonStates() {
+        boolean firstPersonUsesAim =
+                firstPersonCrosshair == CrosshairMode.AIM
+                        || firstPersonCrosshair == CrosshairMode.STATIC_AIM;
+
+        boolean thirdPersonUsesAim =
+                crosshairMode == CrosshairMode.AIM
+                        || crosshairMode == CrosshairMode.STATIC_AIM;
+
+        boolean usesStaticAim =
+                firstPersonCrosshair == CrosshairMode.STATIC_AIM
+                        || crosshairMode == CrosshairMode.STATIC_AIM;
+
+        boolean usesTintableCrosshair =
+                firstPersonCrosshair == CrosshairMode.STATIC
+                        || firstPersonCrosshair == CrosshairMode.AIM
+                        || crosshairMode == CrosshairMode.STATIC
+                        || crosshairMode == CrosshairMode.AIM;
+
         staticCrosshairStyleButton.active =
-                crosshairMode == CrosshairMode.STATIC_AIM;
+                usesStaticAim;
+
+        aimSmoothingButton.active =
+                firstPersonUsesAim || thirdPersonUsesAim;
+
+        distanceBasedAimSizeButton.active =
+                firstPersonUsesAim || thirdPersonUsesAim;
+
+        crosshairTintButton.active =
+                usesTintableCrosshair;
+
+        crosshairInBackPerspectiveButton.active =
+                !skipBackPerspective;
     }
 
     private Component getFirstPersonCrosshairText() {
