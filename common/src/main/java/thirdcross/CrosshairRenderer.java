@@ -14,7 +14,7 @@ public class CrosshairRenderer {
 
     private static final ResourceLocation STATIC_CIRCLE_SPRITE =
             ResourceLocation.fromNamespaceAndPath(
-                    ThirdCross.MODID,
+                    ModConstants.MOD_ID,
                     "crosshair/static_circle"
             );
 

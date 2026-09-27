@@ -18,3 +18,5 @@ plugins {
 }
 
 rootProject.name = 'ThirdCross'
+
+include 'fabric'

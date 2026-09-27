@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "thirdcross",
+  "version": "${version}",
+  "name": "ThirdCross: Third-Person Utilities",
+  "description": "ThirdCross adds configurable first- and third-person crosshairs, including an aim-point crosshair that follows blocks and entities.",
+  "authors": [
+    "NotBerryYummy"
+  ],
+  "contact": {
+    "homepage": "https://github.com/NotBerryYummy/ThirdCross",
+    "issues": "https://github.com/NotBerryYummy/ThirdCross/issues"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "thirdcross.FabricThirdCross"
+    ],
+    "client": [
+      "thirdcross.FabricThirdCrossClient"
+    ],
+    "modmenu": [
+      "thirdcross.FabricModMenu"
+    ]
+  },
+  "mixins": [
+    {
+      "config": "thirdcross.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "minecraft": "~1.21.1",
+    "fabric-api": "*",
+    "sablecompanion": "*"
+  }
+}

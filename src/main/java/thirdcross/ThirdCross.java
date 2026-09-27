@@ -7,7 +7,7 @@ import net.neoforged.fml.config.ModConfig;
 
 @Mod(ThirdCross.MODID)
 public class ThirdCross {
-    public static final String MODID = "thirdcross";
+    public static final String MODID = ModConstants.MOD_ID;
 
     public ThirdCross(IEventBus modEventBus, ModContainer modContainer) {
         NeoForgeConfig.initialize();
