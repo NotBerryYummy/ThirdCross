@@ -12,6 +12,7 @@
     "issues": "https://github.com/NotBerryYummy/ThirdCross/issues"
   },
   "license": "MIT",
+  "icon": "assets/thirdcross/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
