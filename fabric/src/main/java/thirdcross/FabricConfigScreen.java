@@ -339,7 +339,8 @@ public final class FabricConfigScreen extends Screen {
                 usesTintableCrosshair;
 
         crosshairInBackPerspectiveButton.active =
-                !skipBackPerspective;
+                crosshairMode != CrosshairMode.OFF
+                        && !skipBackPerspective;
     }
 
     private Component getFirstPersonCrosshairText() {
